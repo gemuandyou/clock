@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>时钟</title>
+    </head>
+    <body>
+        <!-- <canvas id="clock" width="1000" height="1000" style="background-color: antiquewhite">浏览器不支持Canvas</canvas> -->
+        <canvas id="clock" width="500" height="500" style="background-color: antiquewhite">浏览器不支持Canvas</canvas>
+        <!-- <canvas id="clock" width="200" height="200" style="background-color: antiquewhite">浏览器不支持Canvas</canvas> -->
+        <script src="clock.js"></script>
+        <script>
+            Clock.draw(document.getElementById('clock'), {
+                lineWidth: 10,
+                lineColor: '#ccc',
+                type: 2,
+                showDigital: false
+            });
+        </script>
+    </body>
+</html>
