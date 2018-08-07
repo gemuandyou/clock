@@ -2,8 +2,8 @@
 
     var clock = {
         settings: {
-            lineWidth: 10, // 时钟圆形边框的线条粗度
-            lineColor: 'black', // 时钟圆形边框的线条颜色
+            lineWidth: 10, // 时钟圆的线条粗度
+            lineColor: 'black', // 时钟圆的线条颜色
             type: 1, // 时钟指针类型
             showDigital: true // 是否显示数字时间
         },
@@ -33,7 +33,45 @@
             function timeRollOn() {
                 ctx.clearRect(0, 0, width, height);
 
-                // 画圆
+                drawCircle();
+                drawScale();
+
+                var now = new Date();
+                hour = now.getHours();
+                minute = now.getMinutes();
+                second = now.getSeconds();
+                millSecond = now.getMilliseconds();
+
+                switch (settings.type) {
+                    case 1:
+                        getHands1(ctx, hour, minute, second, millSecond);
+                        break;
+                    case 2:
+                        getHands2(ctx, hour, minute, second, millSecond);
+                        break;
+                    default:
+                        getHands1(ctx, hour, minute, second, millSecond);
+                        break;
+                }
+
+                // 显示数字时间
+                if (settings.showDigital) {
+                    ctx.save();
+                    ctx.translate(circleSize, circleSize);
+                    ctx.beginPath();
+                    ctx.font = fontSize + 'px Microsoft Yahei';
+                    ctx.strokeStyle = '#090';
+                    ctx.strokeText((hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute) + ':' + 
+                                   (second < 10 ? '0' + second : second), -fontSize * 2, -circleSize * 0.5);
+                    ctx.closePath();
+                    ctx.restore();
+                }
+            }
+
+            /**
+             * 画圆
+             */
+            function drawCircle() {
                 ctx.save();
                 ctx.beginPath();
                 ctx.lineWidth = settings.lineWidth;
@@ -42,8 +80,12 @@
                 ctx.stroke();
                 ctx.closePath();
                 ctx.restore();
+            }
 
-                // 画刻度
+            /**
+             * 画刻度
+             */
+            function drawScale() {
                 for (var i = 0; i < 60; i++) {
                     ctx.save();
                     ctx.translate(circleSize, circleSize); // 重置画布上的坐标原点为圆的中心
@@ -91,41 +133,10 @@
                     ctx.closePath();
                     ctx.restore();
                 }
-
-                var now = new Date();
-                hour = now.getHours();
-                minute = now.getMinutes();
-                second = now.getSeconds();
-                millSecond = now.getMilliseconds();
-
-                switch (settings.type) {
-                    case 1:
-                        getHands1(ctx, hour, minute, second, millSecond);
-                        break;
-                    case 2:
-                        getHands2(ctx, hour, minute, second, millSecond);
-                        break;
-                    default:
-                        getHands1(ctx, hour, minute, second, millSecond);
-                        break;
-                }
-
-                // 显示数字时间
-                if (settings.showDigital) {
-                    ctx.save();
-                    ctx.translate(circleSize, circleSize);
-                    ctx.beginPath();
-                    ctx.font = fontSize + 'px Microsoft Yahei';
-                    ctx.strokeStyle = '#090';
-                    ctx.strokeText((hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute) + ':' + 
-                                   (second < 10 ? '0' + second : second), -fontSize * 2, -circleSize * 0.5);
-                    ctx.closePath();
-                    ctx.restore();
-                }
             }
 
             /**
-             * 时钟指针的第一种类型
+             * 画第一种类型的时钟指针
              * @param {CanvasRenderingContext2D} ctx 
              * @param {Number} hour 
              * @param {Number} minute 
@@ -190,7 +201,7 @@
             }
 
             /**
-             * 时钟指针的第二种类型
+             * 画第二种类型的时钟指针
              * @param {CanvasRenderingContext2D} ctx 
              * @param {Number} hour 
              * @param {Number} minute 
