@@ -59,6 +59,7 @@
                     ctx.save();
                     ctx.translate(circleSize, circleSize);
                     ctx.beginPath();
+                    var fontSize = circleSize / 12.5 > 10 ? circleSize / 12.5 : 11;
                     ctx.font = fontSize + 'px Microsoft Yahei';
                     ctx.strokeStyle = '#090';
                     ctx.strokeText((hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute) + ':' + 
